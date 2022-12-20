@@ -15,6 +15,8 @@
             {
                 new FootballWorldCupData { Country = "Argentina", Place = 1},
                 new FootballWorldCupData { Country = "France", Place = 2},
+                new FootballWorldCupData { Country = "Croatia", Place = 3},
+                new FootballWorldCupData { Country = "Morocco", Place = 4},
             };
         }
     }

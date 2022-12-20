@@ -20,5 +20,6 @@ builder.Services.AddScoped<IAccountService, AccountService>()
 builder.Services.AddSubtleCrypto(opt => opt.Key = Constants.CryptoKey);
 builder.Services.AddOptions();
 builder.Services.AddAuthorizationCore();
+   
 
 await builder.Build().RunAsync();
