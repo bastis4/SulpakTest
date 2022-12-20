@@ -1,0 +1,63 @@
+﻿@page "/account/login"
+@layout LoginLayout
+@inject NavigationManager NavigationManager
+@inject IAccountService AccountService
+@inject AuthenticationStateProvider AuthStateProvider
+
+<div class="card">
+    <h4 class="card-header">Login</h4>
+    <div class="card-body">
+        <EditForm Model="@model" OnValidSubmit="OnValidSubmit">
+            <DataAnnotationsValidator />
+
+            <div class="form-group">
+                <label>Username</label>
+                <InputText @bind-Value="model.Username" class="form-control" />
+                <ValidationMessage For="@(() => model.Username)" />
+            </div>
+            <div class="form-group">
+                <label>Password</label>
+                <InputText @bind-Value="model.Password" type="password" class="form-control" />
+                <ValidationMessage For="@(() => model.Password)" />
+            </div>
+            <div class="mt-2 form-group">
+                <button disabled="@loading" class="btn btn-primary">
+                    @if (loading)
+                    {
+                        <span class="spinner-border spinner-border-sm mr-1"></span>
+                    }
+                    Login
+                </button>
+            </div>
+
+            <div class="col-12 row" style="text-align:left; font-weight:bold">
+                <span class="col-12">@LoginMesssage</span>
+            </div>
+        </EditForm>
+    </div>
+</div>
+
+@code {
+    private LoginUser model = new LoginUser();
+    public string LoginMesssage { get; set; }
+    private bool loading;
+
+    private async Task OnValidSubmit()
+    {
+        loading = true;
+
+        var isLogged = await AccountService.TryLogin(model);
+        if (isLogged)
+        {
+            _ = await AuthStateProvider.GetAuthenticationStateAsync();
+
+            NavigationManager.NavigateTo("/");
+        }
+        else
+        {
+            loading = false;
+            LoginMesssage = "Invalid username or password";
+            StateHasChanged();
+        }
+    }
+}

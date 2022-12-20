@@ -1,0 +1,21 @@
+﻿@page "/users/current"
+@attribute [Authorize(Roles = "admin")]
+
+@inject IAccountService AccountService
+
+<PageTitle>Current User</PageTitle>
+
+<h1>Current user info</h1>
+
+Login: @(currentUser?.Login)
+
+
+@code
+{
+    private User currentUser;
+
+    protected async override Task OnInitializedAsync()
+    {
+        currentUser = await AccountService.GetCurrentUser();
+    }
+}

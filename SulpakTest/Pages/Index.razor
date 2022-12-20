@@ -1,0 +1,37 @@
+﻿@page "/"
+@using Microsoft.AspNetCore.Components.QuickGrid
+@attribute [Authorize]
+@inject FootballWorldCupDataService FootballWorldCupDataService
+
+<PageTitle>Index</PageTitle>
+
+<h1>QuickGrid usage example</h1>
+
+<div class="page-size-chooser">
+    Items per page:
+    <select @bind="@pagination.ItemsPerPage">
+        <option>5</option>
+        <option>10</option>
+        <option>20</option>
+        <option>50</option>
+    </select>
+</div>
+
+<div class="grid">
+    <QuickGrid Items="@data" Pagination="@pagination">
+        <PropertyColumn Property="@(c => c.Country)" Sortable="true" Class="country-name" />
+        <PropertyColumn Property="@(c => c.Place)" Sortable="true" Align="Align.Right" />
+    </QuickGrid>
+</div>
+
+<Paginator Value="@pagination" />
+
+@code {
+    PaginationState pagination = new PaginationState { ItemsPerPage = 10 };
+    IQueryable<FootballWorldCupData> data;
+
+    protected override void OnInitialized()
+    {
+        data = FootballWorldCupDataService.GetData().AsQueryable();
+    }
+}
